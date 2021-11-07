@@ -1,0 +1,25 @@
+.appbar {
+	-fx-background-color: #260e04;
+	-fx-padding: 16 16 16 16;
+	-fx-spacing: 24;
+	-fx-pref-width: 200;
+	-fx-pref-height: 56;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.appbar-title {
+	-fx-text-fill: white;
+	-fx-font-size: 2em;
+	-fx-font-weight: bold;
+}
+
+.appbar .button {
+	-fx-content-display: GRAPHIC_ONLY;
+	-fx-pref-width: 24;
+	-fx-pref-height: 24;
+}
+
+.appbar .button:hover {
+	-fx-scale-x: 1.1;
+	-fx-scale-y: 1.1;
+}
