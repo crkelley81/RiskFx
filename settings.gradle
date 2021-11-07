@@ -8,5 +8,7 @@
  */
 
 rootProject.name = 'riskfx'
+include('appfx')
+include('riskfx-app')
 include('riskfx-engine')
 include('riskfx-engine-akka')

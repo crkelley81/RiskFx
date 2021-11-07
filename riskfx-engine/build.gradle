@@ -16,6 +16,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 16
+targetCompatibility = 16
+
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'

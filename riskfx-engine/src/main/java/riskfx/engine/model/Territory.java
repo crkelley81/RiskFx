@@ -2,6 +2,8 @@ package riskfx.engine.model;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 
@@ -51,6 +53,12 @@ public class Territory {
 		return this.armies;
 	}
 	
+	/* package */ void setArmies(final long armies) {
+		final long oldArmies = this.armies;
+		this.armies = armies;
+		this.notifier.territoryArmiesChanged(this, oldArmies, oldArmies);
+	}
+	
 	/* package */ void setOwner(final Player owner) {
 		final Player ov = this.owner;
 		this.owner = owner;
@@ -63,5 +71,9 @@ public class Territory {
 	
 	/* package */ void initNotifier(final Notifier notifier) {
 		this.notifier = notifier;
+	}
+	
+	/* package */ void initNeighbors(final Stream<Territory> territories) {
+		this.neighbors = territories.collect(Collectors.toUnmodifiableSet());
 	}
 }
