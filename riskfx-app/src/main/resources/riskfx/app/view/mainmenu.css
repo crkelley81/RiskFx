@@ -1,0 +1,16 @@
+#root {
+	-fx-padding: 24;
+}
+
+#title {
+	-fx-font-size: 4em;
+}
+
+.button-container {
+	-fx-spacing: 16;
+}
+
+.button-container .button {
+	-fx-pref-width: 200;
+
+}
