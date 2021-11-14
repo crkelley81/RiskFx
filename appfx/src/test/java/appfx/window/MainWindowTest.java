@@ -1,5 +1,6 @@
 package appfx.window;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxAssert;
@@ -26,7 +27,8 @@ class MainWindowTest {
 		
 		mainWindow = new MainWindow();
 		mainWindow.getAppBar().titleTextProperty().set("My Application");
-		
+		mainWindow.setContent(content);
+
 		final Scene scene = new Scene(mainWindow, 600, 600);
 		stage.setScene(scene);
 		stage.show();
@@ -39,19 +41,22 @@ class MainWindowTest {
 		robot.interact(() -> {
 			final UserNotification message = UserNotification.of("Hello world!");
 			mainWindow.notify(message);
-		}).sleep(100);
+		}).sleep(1000);
 		
 		// THEN
 		FxAssert.verifyThat("Hello world!", NodeMatchers.isVisible());
 	}
 	
 	@Test
-	void test() throws InterruptedException {
+	void test(final FxRobot robot) throws InterruptedException {
 		// GIVEN 
-		
+		FxAssert.verifyThat("#main-window-container", NodeMatchers.isVisible());
+		Assertions.assertThat(mainWindow.getContent()).isEqualTo(content);
+
 		// THEN 
 		
 		// WHEN 
+		
 		FxAssert.verifyThat(".mainwindow", NodeMatchers.isVisible());
 		FxAssert.verifyThat(".appbar", NodeMatchers.isVisible());
 		FxAssert.verifyThat(".appbar-title", LabeledMatchers.hasText("My Application"));

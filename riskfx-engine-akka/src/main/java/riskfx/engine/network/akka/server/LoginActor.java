@@ -15,10 +15,11 @@ import riskfx.engine.network.akka.ConnectionProtocol.Join;
 import riskfx.engine.network.akka.ConnectionProtocol.JoinFailed;
 import riskfx.engine.network.akka.ConnectionProtocol.Request;
 
+
 public class LoginActor {
 
 	public static Behavior<Request> create() {
-
+		return null;
 	}
 
 	private final Duration timeout;

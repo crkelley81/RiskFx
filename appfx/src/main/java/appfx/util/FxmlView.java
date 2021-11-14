@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import appfx.window.AppBar;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 
@@ -61,5 +62,10 @@ public class FxmlView extends StackPane {
 
 	protected String getFxmlName() {
 		return getBaseName() + ".fxml";
+	}
+
+	public void updateAppBar(final AppBar appBar) {
+		// TODO Auto-generated method stub
+		
 	}
 }

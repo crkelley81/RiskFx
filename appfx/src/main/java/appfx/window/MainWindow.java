@@ -3,7 +3,9 @@ package appfx.window;
 import java.util.Objects;
 
 import appfx.ui.LockableView;
+import appfx.util.FxmlView;
 import appfx.util.UserNotification;
+import appfx.util.UserNotificationWithAction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
@@ -33,6 +35,14 @@ public class MainWindow extends Control implements LockableView {
 		
 	}
 	
+	public static class UnlockViewEvent extends Event {
+		public static final EventType<UnlockViewEvent> ANY = new EventType<>("UnlockView");
+		public UnlockViewEvent() {
+			super(ANY);
+		}
+		
+	}
+	
 	public static class NotifyEvent extends Event {
 		public static final EventType<NotifyEvent> ANY = new EventType<>("Notify");
 		
@@ -46,9 +56,23 @@ public class MainWindow extends Control implements LockableView {
 
 	private final AppBar appbar = new AppBar();
 	
-	private final ObjectProperty<Node> contentProperty = new SimpleObjectProperty<>(this, "content");
+	private final ObjectProperty<Node> contentProperty = new SimpleObjectProperty<>(this, "content") {
+
+		@Override
+		protected void invalidated() {
+			final Node nv = get();
+			if (nv != null) {
+				if (nv instanceof FxmlView nx) {
+					nx.updateAppBar(getAppBar());
+				}
+			}
+		}
+		
+	};
 	public final ObjectProperty<Node> contentProperty()		{	return this.contentProperty; }
+	public final Node getContent()							{	return this.contentProperty.getValue(); }
 	public final void setContent(final Node node)			{ 	this.contentProperty.set(node); }
+	
 	
 	public MainWindow() {
 		getStyleClass().add("mainwindow");
@@ -65,7 +89,7 @@ public class MainWindow extends Control implements LockableView {
 
 	@Override
 	public final void unlockView() {
-//		this.fireEvent(new UnlockViewEvent());
+		this.fireEvent(new UnlockViewEvent());
 	}
 
 	public final AppBar getAppBar() {
@@ -73,6 +97,14 @@ public class MainWindow extends Control implements LockableView {
 	}
 	public void notify(final UserNotification message) {
 		fireEvent(new NotifyEvent(message));
+	}
+	public void notify(UserNotificationWithAction n) {
+//		fireEvent(new NotifyEvent(n));
+	}
+	public void notifyError(final UserNotification of, final Throwable ex) {
+		final UserNotificationWithAction n = UserNotification.of(of.message())
+				.withAction("DETAIL", () -> {});
+		notify(n);
 	}
 	
 	

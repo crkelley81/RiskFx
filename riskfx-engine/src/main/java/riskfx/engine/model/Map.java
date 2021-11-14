@@ -6,8 +6,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.base.Functions;
-
 public class Map {
 
 	private final String id;
@@ -20,7 +18,7 @@ public class Map {
 		this.id = Objects.requireNonNull(id);
 		this.displayName = Objects.requireNonNull(displayName);
 	
-		this.continents = continents.collect(Collectors.toUnmodifiableMap(Continent::getId, Functions.identity()));
+		this.continents = continents.collect(Collectors.toUnmodifiableMap(Continent::getId, Function.identity()));
 		this.territories = this.continents.values()
 			.stream()
 			.flatMap(c -> c.territories().stream())

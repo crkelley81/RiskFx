@@ -2,6 +2,7 @@ package riskfx.mapeditor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
 
 import javafx.util.StringConverter;
 
@@ -21,7 +22,7 @@ public class Formatters {
 
 			@Override
 			public String toString(URL url) {
-				return url.toExternalForm();
+				return Optional.ofNullable(url).map(URL::toExternalForm).orElse("");
 			}};
 	}
 

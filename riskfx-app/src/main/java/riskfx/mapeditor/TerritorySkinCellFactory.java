@@ -3,7 +3,7 @@ package riskfx.mapeditor;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
-import riskfx.mapeditor.model.TerritorySkin;
+import riskfx.ui.TerritorySkin;
 
 public class TerritorySkinCellFactory extends ListCell<TerritorySkin> {
 

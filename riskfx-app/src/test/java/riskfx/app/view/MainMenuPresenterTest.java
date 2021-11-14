@@ -12,7 +12,7 @@ class MainMenuPresenterTest {
 	
 	@BeforeEach public void setup() {
 		context = Mockito.mock(UiContext.class);
-		presenter = new MainMenu(context);
+//		presenter = new MainMenu(context);
 	}
 	
 	@Test

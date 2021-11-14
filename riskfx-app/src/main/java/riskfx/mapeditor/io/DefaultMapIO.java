@@ -38,7 +38,7 @@ class DefaultMapIO implements MapIO {
 		Objects.requireNonNull(map);
 		Objects.requireNonNull(path);
 
-		final Path tempPath = Files.createTempFile(null, null);
+		final Path tempPath = Files.createTempFile(getClass().getSimpleName(), ".css");
 
 		final StringBuilder text = new StringBuilder();
 		map.renderCss(text);

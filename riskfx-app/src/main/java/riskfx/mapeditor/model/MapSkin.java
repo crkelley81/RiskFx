@@ -1,6 +1,7 @@
 package riskfx.mapeditor.model;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -15,8 +16,10 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import riskfx.app.util.role.Dirtyable;
 import riskfx.app.util.role.MutableDisplayable;
 import riskfx.app.util.role.MutableIdentifiable;
+import riskfx.ui.TerritorySkin;
 
 public class MapSkin implements As, MutableIdentifiable, MutableDisplayable, Dirtyable, CssRenderable {
 
@@ -84,14 +87,29 @@ public class MapSkin implements As, MutableIdentifiable, MutableDisplayable, Dir
 	}
 	
 	public void renderCss(final StringBuilder buffer) {
-		// TODO Render the header 
+		final String NEWLINE = "\n";
+		buffer.append("/*").append(NEWLINE);
+		buffer.append(" * Id: ").append(getId()).append(NEWLINE);
+		buffer.append(" * Name: ").append(getDisplayName()).append(NEWLINE);
+		buffer.append(" * Author: ").append(Optional.ofNullable(getAuthor()).orElse("")).append(NEWLINE);
+		buffer.append(" * Description: ").append(getDescription()).append(NEWLINE);
+		buffer.append(" * Last Updated: ").append(Instant.now()).append(NEWLINE);
+		buffer.append(" */").append(NEWLINE).append(NEWLINE);
+		
+		buffer.append(".board {").append(NEWLINE);
+		buffer.append("\t").append("-background-image: url(\"%s\");".formatted(getBackgroundImageFileName())).append(NEWLINE);
+		buffer.append("}").append(NEWLINE).append(NEWLINE);
 		
 		territories.forEach(t -> t.renderCss(buffer));
 	}
 
-	public TerritorySkin newTerritorySkin(String id, String name, Object... lookups) {
-		final TerritorySkin ts = new TerritorySkin(id, name, lookups);
+	public TerritorySkin<?> newTerritorySkin(String id, String name, Object... lookups) {
+		final TerritorySkin<?> ts = new TerritorySkin<>(id, name, lookups);
 		territories.add(ts);
 		return ts;
+	}
+	
+	private String getBackgroundImageFileName() {
+		return getBackgroundImageUrl().getFile();
 	}
 }

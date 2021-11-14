@@ -1,18 +1,7 @@
 package appfx.window;
 
-import java.time.Duration;
-import java.util.Objects;
-
-import org.controlsfx.control.NotificationPane;
-
-import appfx.util.UserNotification;
-import freetimelabs.io.reactorfx.flux.FxFlux;
-import freetimelabs.io.reactorfx.schedulers.FxSchedulers;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-
 public class NotificationHelper {
-	
+/*	
 	@FunctionalInterface
 	private static interface Notication {
 		public void apply(final NotificationPane pane);
@@ -45,4 +34,5 @@ public class NotificationHelper {
 			pane.show(n.message());
 		});
 	}
+*/
 }

@@ -17,9 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import reactor.core.publisher.Mono;
 import riskfx.mapeditor.model.MapSkin;
-import riskfx.mapeditor.model.TerritorySkin;
 import riskfx.mapeditor.outliner.IntrinsicOutliner;
 import riskfx.mapeditor.outliner.Outliner;
+import riskfx.ui.TerritorySkin;
 
 class Worker {
 
@@ -89,8 +89,10 @@ class Worker {
 		skin.territories().forEach(ts -> processBoundary(ts, mapImage));
 	}
 
-	private void processBoundary(final TerritorySkin ts, final Image mapImage) {
+	private void processBoundary(final TerritorySkin<?> ts, final Image mapImage) {
 		final Outliner outliner= new IntrinsicOutliner(mapImage);
+		
+//		final DominationTerritoryExt ext = ts.as(DominationTerritoryExt.class).get();
 		final int i = ts.as(DominationTerritoryExt.class).get().getColorIndex();
 		final Color c = Color.rgb(i, i, i);
 		
