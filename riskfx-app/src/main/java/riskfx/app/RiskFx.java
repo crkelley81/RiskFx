@@ -11,7 +11,7 @@ public class RiskFx {
 
 	private Lazy<MainMenu> mainMenu;
 
-	@Inject public RiskFx(final Lazy<MainMenu> mainMenu) {
+	@Inject public RiskFx() {
 		this.mainMenu = Objects.requireNonNull(mainMenu);
 	}
 	

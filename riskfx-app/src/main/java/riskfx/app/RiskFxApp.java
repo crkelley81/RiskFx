@@ -1,8 +1,12 @@
 package riskfx.app;
 
-import dagger.Component;
+import javax.inject.Singleton;
 
-@Component()
+import dagger.Component;
+import riskfx.app.view.MainMenu;
+import riskfx.mapeditor.MapEditorModule;
+
+@Singleton @Component(modules= { RiskFxModule.class, MapEditorModule.class })
 public interface RiskFxApp {
-	public RiskFx riskFx();
+	public MainMenu mainMenu();
 }
