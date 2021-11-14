@@ -5,6 +5,7 @@
 	-fx-pref-width: 200;
 	-fx-pref-height: 56;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+	-fx-alignment: LEFT_CENTER;
 }
 
 .appbar-title {
@@ -13,7 +14,7 @@
 	-fx-font-weight: bold;
 }
 
-.appbar .button {
+.appbar .button, .appbar .menu-button {
 	-fx-content-display: GRAPHIC_ONLY;
 	-fx-pref-width: 24;
 	-fx-pref-height: 24;

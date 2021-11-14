@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -17,7 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class AnimatedFlowContainer {
-
+	private static final Logger LOG = Logger.getLogger(AnimatedFlowContainer.class.getName());
 	private static final Duration DEFAULT_DURATION = Duration.millis(320);
 	
 	private final Duration duration;
@@ -39,6 +40,7 @@ public class AnimatedFlowContainer {
 	}
 	
 	public void updateContent(final Node content) {
+		LOG.info("Updating flow container content with %s".formatted(content));
 		updatePlaceholder(content);
 
         if (animation != null) {
@@ -58,7 +60,9 @@ public class AnimatedFlowContainer {
 	}
 	
 	private void clearPlaceholder() {
-        placeholder.setImage(null);
+		LOG.info("Clearing placeholder: %s".formatted(root.getChildren()));
+      
+		placeholder.setImage(null);
         placeholder.setVisible(false);
     }
 

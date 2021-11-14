@@ -22,7 +22,7 @@ public class AppBar extends Control {
 	public final ObjectProperty<Node> navIconProperty()		{	return this.navIconProperty; }
 	public final Node getNavIcon()							{	return this.navIconProperty.get(); }
 	
-	public AppBar() {
+	/* package */ AppBar() {
 		this.getStyleClass().add(DEFAULT_STYLE_CLASS);
 	}
 	

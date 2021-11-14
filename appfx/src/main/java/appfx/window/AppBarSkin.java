@@ -6,6 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 public class AppBarSkin extends SkinBase<AppBar> implements Skin<AppBar> {
 
@@ -30,6 +32,7 @@ public class AppBarSkin extends SkinBase<AppBar> implements Skin<AppBar> {
 		
 		final Node node = Optional.ofNullable(getSkinnable().getTitle())
 			.orElse(titleLabel);
+		HBox.setHgrow(node, Priority.ALWAYS);
 		getChildren().add(node);
 	
 	}
