@@ -30,7 +30,7 @@ class MainMenuViewTest {
 	
 	@Start public void setup(final Stage stage) {
 		
-		presenter = new MainMenu(context, null);
+		presenter = new MainMenu(context, null, null);
 		presenter.inflateView();
 		
 		final Scene scene = new Scene(presenter);

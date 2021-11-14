@@ -19,12 +19,12 @@ public final class MainMenu extends FxmlView {
 
 	private Navigation navigation;
 
-	private final Lazy<NewGameView> lazyNewGame;
+	private final Lazy<NewGame> lazyNewGame;
 
 	private final Lazy<MapEditor> lazyMapEditor;
 
 	@Inject public MainMenu(final UiContext context,
-			final Lazy<NewGameView> lazyNewGame,
+			final Lazy<NewGame> lazyNewGame,
 			final Lazy<MapEditor> lazyMapEditor) {
 		this.context = Objects.requireNonNull(context);
 		this.lazyNewGame = Objects.requireNonNull(lazyNewGame);

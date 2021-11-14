@@ -5,8 +5,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextInputControl;
@@ -47,6 +49,23 @@ public class Bind {
 			final T value = property.getValue();
 			if (value != null) {
 				final P prop = mapper.apply(value);
+				if (prop != null) {
+					valueProperty.bindBidirectional(prop);
+				}
+			}
+		};
+		property.addListener(invalidationListener);
+		invalidationListener.invalidated(property);
+	}
+
+	public static<T> void bind(BooleanProperty valueProperty, ObjectProperty<T> property,
+			Function<T, BooleanProperty> mapper) {
+		final InvalidationListener invalidationListener = o -> {
+			valueProperty.unbind();
+
+			final T value = property.getValue();
+			if (value != null) {
+				final BooleanProperty prop = mapper.apply(value);
 				if (prop != null) {
 					valueProperty.bindBidirectional(prop);
 				}
