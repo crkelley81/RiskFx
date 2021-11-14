@@ -16,6 +16,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 16
+targetCompatibility = 16
+
 dependencies {
     api project(':riskfx-engine')
     

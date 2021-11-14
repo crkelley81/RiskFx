@@ -6,12 +6,19 @@
  * User Manual available at https://docs.gradle.org/7.2/userguide/building_java_projects.html
  */
 
+
+
 plugins {
     id 'eclipse'
     id 'java-library'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.10'
+    id "com.diffplug.eclipse.apt" version "3.33.2"
+    id 'org.javamodularity.moduleplugin' version '1.8.10'
 }
+
+//apply plugin: "net.ltgt.apt"
+//apply plugin: "net.ltgt.apt-eclipse"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -24,12 +31,28 @@ targetCompatibility = 16
 javafx {
 	sdk = '/opt/javafx/javafx-sdk-17.0.1'
     version = "17"
-    modules = [ 'javafx.controls' ]
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+application {
+//	mainModule = 'risk.app'
+    mainClass = 'riskfx.app.Main'
+}
+
+eclipse {
+  sourceSets {
+    main {
+      java {
+         srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+      }
+    }
+  }
 }
 
 dependencies {
 	implementation project(':appfx')
-
+	api project(':riskfx-engine')
+	
     // Use JUnit Jupiter for testing.
     testImplementation "io.projectreactor:reactor-test:3.4.11"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
@@ -38,18 +61,28 @@ dependencies {
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
 
 
+	implementation 'javax.annotation:javax.annotation-api:1.3'
+    annotationProcessor("javax.annotation:javax.annotation-api:1.3.2")
+    
     api "io.projectreactor:reactor-core:3.4.11"
+    implementation "com.github.shadskii:reactorfx:2.0.0"
+    
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.2.0'
+    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.2.0'
+    
     //testCompile "io.projectreactor:reactor-test:3.4.11"
     
     // implementation 'com.gluonhq:ignite-guice:1.1.0'
-    // implementation group: 'com.google.inject', name: 'guice', version: '4.0'
+    implementation group: 'com.google.inject', name: 'guice', version: '4.0'
     
   //  implementation 'com.gluonhq:ignite-dagger:1.1.0'
-    implementation 'com.google.dagger:dagger:2.4'
-    annotationProcessor "com.google.dagger:dagger-compiler:2.4"
+	implementation 'com.google.dagger:dagger:2.4'
+	annotationProcessor "com.google.dagger:dagger-compiler:2.4"
 }
+
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
