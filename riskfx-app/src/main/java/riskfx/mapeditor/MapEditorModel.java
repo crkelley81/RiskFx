@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.inject.Inject;
+
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
@@ -18,7 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import riskfx.mapeditor.model.MapSkin;
-import riskfx.mapeditor.model.TerritorySkin;
+import riskfx.ui.TerritorySkin;
 
 /**
  * 
@@ -71,7 +73,7 @@ public class MapEditorModel {
 	private final FilteredList<TerritorySkin> filtered = territoriesProperty.filtered(ts -> true);
 	private final SortedList<TerritorySkin> sorted = filtered.sorted();
 
-	public MapEditorModel() {
+	@Inject public MapEditorModel() {
 		sorted.comparatorProperty().bind(sortProperty);
 	}
 	

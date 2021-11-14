@@ -1,8 +1,12 @@
 package riskfx.mapeditor;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -23,6 +27,8 @@ import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.ListViewMatchers;
 import org.testfx.matcher.control.TextInputControlMatchers;
 
+import appfx.ui.ExitController;
+import appfx.ui.FileDialogs;
 import appfx.ui.UiContext;
 import appfx.window.MainWindow;
 import javafx.scene.Scene;
@@ -35,7 +41,7 @@ import riskfx.mapeditor.io.MapIO;
 import riskfx.mapeditor.io.MapImporter;
 import riskfx.mapeditor.io.domination.DominationMapImporter;
 import riskfx.mapeditor.model.MapSkin;
-import riskfx.mapeditor.model.TerritorySkin;
+import riskfx.ui.TerritorySkin;
 
 @ExtendWith(ApplicationExtension.class)
 
@@ -54,16 +60,22 @@ class MapEditorViewTest {
 	private MainWindow mainWindow;
 	private MapEditor mapEditor;
 
+	private ExitController exitController = Mockito.mock(ExitController.class);
+	private FileDialogs fileDialogs = Mockito.mock(FileDialogs.class);
+	
 	private UiContext context;
-	private MapIO io = Mockito.mock(MapIO.class);
+	private MapIO io = MapIO.create(); // Mockito.mock(MapIO.class);
 	private MapEditorModel model = new MapEditorModel();
+
+	private UiContext contextSpy;
 
 	@Start
 	public void start(final Stage stage) {
 		mainWindow = new MainWindow();
-		context = Mockito.mock(UiContext.class);
-
-		mapEditor = new MapEditor(context, model, io);
+		context = UiContext.of(mainWindow, fileDialogs, exitController);
+		contextSpy = Mockito.spy(context);
+		
+		mapEditor = new MapEditor(contextSpy, model, io);
 		mapEditor.inflateView();
 		mainWindow.setContent(mapEditor);
 		mapEditor.updateAppBar(mainWindow.getAppBar());
@@ -72,6 +84,17 @@ class MapEditorViewTest {
 		stage.setScene(scene);
 		stage.sizeToScene();
 		stage.show();
+	}
+	
+	@Test void mainMenuShouldGoToMainMenu(final FxRobot robot) {
+		// GIVEN 
+		Mockito.doNothing().when(contextSpy).goBack();
+		// WHEN 
+		robot.clickOn("#navIconBtn").sleep(SHORT_PAUSE);
+		robot.clickOn("Main Menu");
+		
+		// THEN 
+		Mockito.verify(contextSpy).goBack();
 	}
 
 	@Test
@@ -125,7 +148,7 @@ class MapEditorViewTest {
 	private void saveBigEurope(FxRobot robot, Path savePath)
 			throws InterruptedException, ExecutionException, TimeoutException, IOException {
 		// GIVEN
-		Mockito.when(io.saveMap(model.getMap(), savePath)).thenReturn(model.getMap());
+//		Mockito.when(io.saveMap(model.getMap(), savePath)).thenReturn(model.getMap());
 
 		// TODO Use the menu
 		final CompletableFuture<MapSkin> future = mapEditor.saveMap(model.getMap(), savePath).toFuture();
@@ -133,8 +156,8 @@ class MapEditorViewTest {
 		future.get(5, TimeUnit.SECONDS);
 
 		// THEN
-		Mockito.verify(io).saveMap(model.getMap(), savePath);
-
+//		Mockito.verify(io).saveMap(model.getMap(), savePath);
+		Assertions.assertThat(Files.exists(savePath)).isTrue();
 	}
 
 	private void toggleSortOnBigEurope(final FxRobot robot) {
@@ -153,7 +176,7 @@ class MapEditorViewTest {
 		Assertions.assertThat(listView.getItems().get(0)).isEqualTo(territories.get(0));
 
 		// WHEN
-		robot.clickOn("#toggleSortBtn");
+		robot.clickOn("#toggleSortBtn").sleep(SHORT_PAUSE);
 
 		// THEN
 		Assertions.assertThat(model.getSortDirection()).isEqualTo(SortDirection.ASCENDING);
@@ -177,7 +200,9 @@ class MapEditorViewTest {
 		// THEN
 
 		final MapSkin skin = future.get(5, TimeUnit.SECONDS);
-		robot.sleep(SHORT_PAUSE);
+		robot.sleep(400);
+		
+		FxAssert.verifyThat(".glasspane", NodeMatchers.isInvisible());
 
 		Assertions.assertThat(model.getMap()).isEqualTo(skin);
 		Assertions.assertThat(model.currentPathProperty().get()).isNull();
@@ -188,7 +213,7 @@ class MapEditorViewTest {
 	}
 
 	@Test
-	void newMapAndAddTerritories(final FxRobot robot) throws InterruptedException {
+	void newMapAndAddTerritories(final FxRobot robot) throws InterruptedException, MalformedURLException, URISyntaxException {
 		// GIVEN
 //		Thread.sleep(4000);
 		// WHEN
@@ -236,7 +261,7 @@ class MapEditorViewTest {
 //		Assertions.assertThat(skin.getIndicatorY()).isEqualTo(y);
 	}
 
-	private void enterMapInfo(FxRobot robot) throws InterruptedException {
+	private void enterMapInfo(FxRobot robot) throws InterruptedException, URISyntaxException, MalformedURLException {
 		FxAssert.verifyThat("#mapIdField", NodeMatchers.isFocused());
 		robot.write("test-map").press(KeyCode.TAB).sleep(SHORT_PAUSE);
 
@@ -251,8 +276,23 @@ class MapEditorViewTest {
 		FxAssert.verifyThat("#mapDescriptionField", NodeMatchers.isFocused());
 		robot.write("This is a description").press(KeyCode.TAB).sleep(SHORT_PAUSE);
 
-		// TODO Choose background and relief images
-
+		final File backgroundImage = Paths.get(TestHelper.class.getResource("bigeurope_pic.jpg").toURI()).toFile();
+		Mockito.when(fileDialogs.showOpenFileDialog(Mockito.any(), Mockito.any()))
+			.thenReturn(Mono.just(backgroundImage));		
+		
+		robot.clickOn("#chooseBackgroundImageBtn");
+		
+		Assertions.assertThat(model.getMap().getBackgroundImageUrl()).isEqualTo(backgroundImage.toURI().toURL());
+		FxAssert.verifyThat("#mapBackgroundField", TextInputControlMatchers.hasText(backgroundImage.toURI().toURL().toExternalForm()));
+		
+		final File reliefImage = Paths.get(TestHelper.class.getResource("bigeurope_map.gif").toURI()).toFile();
+		Mockito.when(fileDialogs.showOpenFileDialog(Mockito.any(), Mockito.any()))
+			.thenReturn(Mono.just(reliefImage));		
+		robot.clickOn("#chooseReliefImageBtn");
+		
+		Assertions.assertThat(model.getMap().getPicImageUrl()).isEqualTo(reliefImage.toURI().toURL());
+		FxAssert.verifyThat("#mapReliefField", TextInputControlMatchers.hasText(reliefImage.toURI().toURL().toExternalForm()));
+		
 		// TODO validate all data
 
 	}

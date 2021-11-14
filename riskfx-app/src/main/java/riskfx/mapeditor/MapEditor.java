@@ -28,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -35,7 +36,8 @@ import reactor.core.scheduler.Schedulers;
 import riskfx.mapeditor.io.MapIO;
 import riskfx.mapeditor.io.MapImporter;
 import riskfx.mapeditor.model.MapSkin;
-import riskfx.mapeditor.model.TerritorySkin;
+import riskfx.ui.BoardView;
+import riskfx.ui.TerritorySkin;
 
 public class MapEditor extends FxmlView {
 
@@ -70,6 +72,10 @@ public class MapEditor extends FxmlView {
 		menu.getItems().add(newMapBtn);
 	}
 	
+	@FXML public final void goToMainMenu() {
+		context.goBack();
+	}
+	
 	@FXML public final void clearSearch() {
 		searchField.clear();
 	}
@@ -101,7 +107,7 @@ public class MapEditor extends FxmlView {
 		return Mono.fromCallable(() -> {
 			return io.saveMap(skin, path);
 		}).subscribeOn(Schedulers.boundedElastic()).publishOn(FxSchedulers.fxThread())
-				.doOnSubscribe(s -> context.lockView(null)).doOnNext(m -> {
+				.doOnSubscribe(s -> context.lockView(UserNotification.of(""))).doOnNext(m -> {
 					context.notify(UserNotification.of(""));
 					model.edit(m, Optional.of(path));
 				})
@@ -126,7 +132,10 @@ public class MapEditor extends FxmlView {
 			return importer.importMap(path);
 		}).subscribeOn(Schedulers.boundedElastic())
 				.publishOn(FxSchedulers.fxThread())
-				.doOnSubscribe(s -> context.lockView(UserNotification.of("")))
+				.doFirst(() -> {
+					Platform.runLater(() ->
+					context.lockView(UserNotification.of(""))); 
+					})
 				.doOnNext(skin -> {
 					this.model.edit(skin);
 				})
@@ -155,11 +164,12 @@ public class MapEditor extends FxmlView {
 
 	@FXML
 	public void chooseBackgroundImage() {
-		context.showOpenFileDialog(this::openImage).flatMap(f -> Mono.fromCallable(() -> {
-			return f.toURI().toURL();
-		})).subscribe(u -> {
-			// TODO set background image
-		});
+		context.showOpenFileDialog(this::openImage)
+			.flatMap(f -> Mono.fromCallable(() -> {
+				return f.toURI().toURL();
+			})).subscribe(u -> {
+				model.getMap().setBackgroundImageUrl(u);
+			});
 
 	}
 
@@ -168,7 +178,7 @@ public class MapEditor extends FxmlView {
 		context.showOpenFileDialog(this::openImage).flatMap(f -> Mono.fromCallable(() -> {
 			return f.toURI().toURL();
 		})).subscribe(u -> {
-			// TODO set background image
+			model.getMap().setPicImageUrl(u);
 		});
 
 	}
@@ -195,13 +205,17 @@ public class MapEditor extends FxmlView {
 			.subscribe(s -> model.search(s));
 		
 		final TextFormatter<URL> backgroundFormatter = new TextFormatter<>(Formatters.url());
+		mapBackgroundField.setTextFormatter(backgroundFormatter);
+		
 		final TextFormatter<URL> reliefFormatter = new TextFormatter<>(Formatters.url());
-		 
+		mapReliefField.setTextFormatter(reliefFormatter);
+		
 		Bind.bind(mapIdField, model.mapProperty(), MapSkin::idProperty);
 		Bind.bind(mapNameField, model.mapProperty(), MapSkin::displayNameProperty);
 		Bind.bind(mapAuthorField, model.mapProperty(), MapSkin::authorProperty);
 		Bind.bind(mapDescriptionField, model.mapProperty(), MapSkin::descriptionProperty);
-//		Bind.bind(backgroundFormatter.valueProperty(), model.mapProperty(), t -> (URL) null);
+		Bind.bind(backgroundFormatter.valueProperty(), model.mapProperty(), MapSkin::backgroundImageUrlPropery);
+		Bind.bind(reliefFormatter.valueProperty(), model.mapProperty(), MapSkin::picImageUrlProperty);
 
 		model.mapProperty().addListener(this::onMapSkinChanged);
 		model.selectedTerritoryProperty().addListener(this::onSelectedTerritoryChanged);
@@ -218,6 +232,11 @@ public class MapEditor extends FxmlView {
 		
 		Bind.bind(territoryIdField, model.selectedTerritoryProperty(), TerritorySkin::idProperty);
 //		Bind.bind(territoryNameField, model.selectedTerritoryProperty(), TerritorySkin::nameProperty);
+	
+		board = new BoardView<>();
+		board.setItems(model.territories());
+		
+		boardContainer.getChildren().setAll(board);
 	}
 
 	private void buildImportMenu() {
@@ -236,6 +255,9 @@ public class MapEditor extends FxmlView {
 	private void onMapSkinChanged(final ObservableValue<? extends MapSkin> o, final MapSkin ov, final MapSkin nv) {
 		if (nv != null) {
 			mapIdField.textProperty().bindBidirectional(nv.idProperty());
+			
+			board.backgroundImageProperty().bind(nv.backgroundImageProperty());
+			
 		} else {
 			mapIdField.textProperty().unbind();
 		}
@@ -255,6 +277,9 @@ public class MapEditor extends FxmlView {
 		}
 	}
 
+	private BoardView<TerritorySkin, TerritorySkin> board;
+	
+	@FXML private StackPane boardContainer;
 	@FXML
 	private MenuItem newMapBtn;
 	@FXML
