@@ -1,5 +1,6 @@
 package riskfx.engine.network;
 
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 
 public interface ConnectionFactory {
@@ -53,5 +54,5 @@ public interface ConnectionFactory {
 	}
 	
 	
-	public void connect(final String host, final int port, final String displayName, final Notifier notifier);
+	public CompletionStage<Void> connect(final String host, final int port, final String displayName, final Notifier notifier);
 }
