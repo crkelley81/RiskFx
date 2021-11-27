@@ -30,6 +30,7 @@ javafx {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 
+	api project(':riskfx-util')
     api "io.projectreactor:reactor-core:3.4.11"
 //    api group: 'com.airhacks', name: 'afterburner.fx', version: '1.6.0'
     
