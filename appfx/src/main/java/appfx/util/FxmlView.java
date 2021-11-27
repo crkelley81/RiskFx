@@ -11,32 +11,27 @@ import javafx.scene.layout.StackPane;
 
 public class FxmlView extends StackPane {
 	private final CompletableFuture<FxmlView> loadFuture = new CompletableFuture<>();
-	
+
 	public final void inflateView() {
-		assert ! loadFuture.isDone();
+		assert !loadFuture.isDone();
 
 		final FXMLLoader loader = new FXMLLoader();
 
 		final String fxmlName = getFxmlName();
-		System.err.println("Fxml name: " + fxmlName);
 		final URL fxmlUrl = getClass().getResource(fxmlName);
 		assert fxmlUrl != null;
-
-		loader.setLocation(fxmlUrl);
-		loader.setController(this);
-		loader.setRoot(this);
-
+		
 		try {
-			System.err.println("Loading ...");
+			loader.setLocation(fxmlUrl);
+			loader.setController(this);
+			loader.setRoot(this);
+
 			loader.load();
-			System.err.println("Load almost compelte");
 			addCssIfExists(getCssName());
-			
+
 			loadFuture.complete(this);
-			System.err.println("Load complete");
 		} catch (IOException ioe) {
-			System.err.println("Error: " + ioe);
-			ioe.printStackTrace();
+			System.err.println("Failed" + ioe);
 			loadFuture.completeExceptionally(ioe);
 		}
 	}
@@ -44,14 +39,14 @@ public class FxmlView extends StackPane {
 	protected final CompletionStage<FxmlView> loadFuture() {
 		return loadFuture;
 	}
-	
+
 	private void addCssIfExists(String cssName) {
 		final URL url = getClass().getResource(cssName);
 		if (url != null) {
 			getStylesheets().add(url.toExternalForm());
 		}
 	}
-	
+
 	protected String getBaseName() {
 		return getClass().getSimpleName().toLowerCase().replace("presenter", "");
 	}
@@ -66,6 +61,6 @@ public class FxmlView extends StackPane {
 
 	public void updateAppBar(final AppBar appBar) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

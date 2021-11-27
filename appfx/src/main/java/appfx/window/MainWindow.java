@@ -2,10 +2,7 @@ package appfx.window;
 
 import java.util.Objects;
 
-import appfx.ui.LockableView;
 import appfx.util.FxmlView;
-import appfx.util.UserNotification;
-import appfx.util.UserNotificationWithAction;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
@@ -13,6 +10,9 @@ import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import riskfx.util.ui.LockableView;
+import riskfx.util.ui.UserNotification;
+import riskfx.util.ui.UserNotificationWithAction;
 
 /**
  * @author christopher

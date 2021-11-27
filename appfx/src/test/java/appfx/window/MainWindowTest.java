@@ -10,10 +10,10 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 
-import appfx.util.UserNotification;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import riskfx.util.ui.UserNotification;
 
 @ExtendWith(ApplicationExtension.class)
 class MainWindowTest {

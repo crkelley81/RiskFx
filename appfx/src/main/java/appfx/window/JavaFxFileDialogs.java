@@ -1,4 +1,4 @@
-package appfx.ui;
+package appfx.window;
 
 import java.io.File;
 import java.util.Optional;
@@ -9,18 +9,21 @@ import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import reactor.core.publisher.Mono;
+import riskfx.util.ui.FileDialogs;
 
-public interface FileDialogs {
+public class JavaFxFileDialogs implements FileDialogs<Node, FileChooser> {
 
-	default public Mono<File> showOpenFileDialog(final Node node, Consumer<FileChooser> action) {
+	@Override
+	public Mono<File> showOpenFileDialog(Node node, Consumer<FileChooser> action) {
 		return Mono.fromCallable(() -> {
 			final FileChooser chooser = new FileChooser();
 			action.accept(chooser);
-			return chooser.showOpenDialog(getWindow(node));
+			final File file = chooser.showOpenDialog(getWindow(node));
+			return file;
 		});
 	}
 
-	static Window getWindow(final Node node) {
+	private Window getWindow(Node node) {
 		return Optional.ofNullable(node).map(Node::getScene).map(Scene::getWindow).orElse(null);
 	}
 
