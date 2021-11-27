@@ -2,15 +2,12 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<fx:root type="javafx.scene.layout.StackPane" 
-	xmlns="http://javafx.com/javafx/17" 
-	xmlns:fx="http://javafx.com/fxml/1">
-<AnchorPane stylesheets="@mainmenu.css"  fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" > 
+<fx:root styleClass="view" stylesheets="@../riskfx.css" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@mainmenu.css"> 
 <children>
       <VBox styleClass="button-container" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>

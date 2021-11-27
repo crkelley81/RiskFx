@@ -16,22 +16,24 @@ import org.testfx.framework.junit5.Start;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-import appfx.ui.UiContext;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import riskfx.util.ui.UiContext;
 
 @ExtendWith(ApplicationExtension.class)
 class MainMenuViewTest {
 
 //	private DaggerContext di = new GuiceContext(this, () -> provideModules());
 	
-	private UiContext context = Mockito.mock(UiContext.class);
+	private UiContext<Node> context = Mockito.mock(UiContext.class);
+	private Navigation navigation = Mockito.mock(Navigation.class);
 	private MainMenu presenter;
 	
 	@Start public void setup(final Stage stage) {
 		
-		presenter = new MainMenu(context, null, null);
-		presenter.inflateView();
+		presenter = new MainMenu(context, navigation);
+//		presenter.inflateView();
 		
 		final Scene scene = new Scene(presenter);
 		stage.setScene(scene);

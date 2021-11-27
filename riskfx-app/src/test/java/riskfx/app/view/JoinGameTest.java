@@ -12,18 +12,19 @@ import org.testfx.matcher.base.NodeMatchers;
 import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.matcher.control.TextInputControlMatchers;
 
-import appfx.ui.UiContext;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import riskfx.engine.network.ConnectionFactory;
 import riskfx.engine.network.ConnectionFactory.Auth;
 import riskfx.engine.network.ConnectionFactory.Notifier;
+import riskfx.util.ui.UiContext;
 
 @ExtendWith(ApplicationExtension.class)
 class JoinGameTest {
 
-	private UiContext context = Mockito.mock(UiContext.class);
+	private UiContext<Node> context = Mockito.mock(UiContext.class);
 	private ConnectionFactory connectionFactory = Mockito.mock(ConnectionFactory.class);
 	private JoinGame joinGame;
 	

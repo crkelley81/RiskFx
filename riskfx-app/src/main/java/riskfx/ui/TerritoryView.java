@@ -2,12 +2,12 @@ package riskfx.ui;
 
 import java.util.Objects;
 
-import appfx.role.As;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.event.EventType;
 import javafx.scene.Node;
-import riskfx.app.util.role.Identifiable;
-import riskfx.app.util.role.Selectable;
+import riskfx.util.role.As;
+import riskfx.util.role.Identifiable;
+import riskfx.util.role.Selectable;
 
 public interface TerritoryView<T extends Identifiable> extends As, Selectable {
 
@@ -29,8 +29,16 @@ public interface TerritoryView<T extends Identifiable> extends As, Selectable {
 		}
 	}
 	
+	default public String getId() {
+		return item().getId();
+	}
+	
+	public T item();
+	
 	public ReadOnlyBooleanProperty hoveredProperty();
 	default public boolean isHovered()		{	return this.hoveredProperty().get(); }
+	
+	public boolean hit(final double x, final double y);
 	
 	public Node asNode();
 }

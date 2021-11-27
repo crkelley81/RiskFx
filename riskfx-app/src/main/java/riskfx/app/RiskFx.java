@@ -2,20 +2,27 @@ package riskfx.app;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
-
-import dagger.Lazy;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import riskfx.app.view.MainMenu;
+import riskfx.app.view.Navigation;
+import riskfx.util.ui.UiContext;
 
 public class RiskFx {
 
-	private Lazy<MainMenu> mainMenu;
+	public void start(final UiContext<Node> uiContext, final Scene scene, final Stage stage) {
+		scene.getStylesheets().add(stylesheet());
 
-	@Inject public RiskFx() {
-		this.mainMenu = Objects.requireNonNull(mainMenu);
+		final Navigation nav = DaggerRiskFxApp.builder()
+				.riskFxModule(new RiskFxModule(uiContext))
+				.build()
+				.navigation();
+		nav.goToMainMenu();
 	}
-	
-	public final MainMenu get() {
-		return mainMenu.get();
+
+	private String stylesheet() {
+		return Objects.requireNonNull(getClass().getResource("riskfx.css")).toExternalForm();
 	}
+
 }

@@ -1,0 +1,55 @@
+.card {
+	-fx-min-width: 160;
+	-fx-min-heigh: 200;
+	-fx-pref-width: 160;
+	-fx-pref-heigh: 200;
+	-fx-max-width: 160;
+	-fx-max-heigh: 200;
+	
+	-fx-arc-width: 20;
+	-fx-arc-height: 20;
+	
+	-fx-background-color: burlywood;
+	-fx-background-radius: 20;
+	
+	-fx-border-color: saddlebrown;
+	-fx-border-width: 8px;
+	-fx-border-radius: 20;
+	
+	-fx-spacing: 8;
+	-fx-padding: 8 0 8 0;
+	
+	-fx-alignment: top_center;
+	
+	-fx-translate-y: 40;
+}
+
+.card:selected {
+	-fx-translate-y: 0;
+}
+
+.card-territory-background {
+	-fx-opacity: 0.5;
+	-fx-fill: forestgreen;
+}
+
+.card-territory-highlight {
+	-fx-fill: transparent;
+	-fx-stroke-color: forestgreen;
+	-fx-stroke-width: 5;
+}
+
+.card-territory-outline {
+	-fx-fill: transparent;
+	-fx-stroke-color: black;
+	-fx-stroke-width: 1px;
+}
+			
+.card-title {
+	-fx-text-fill: saddlebrown;
+	-fx-text-alignment: center;
+	-fx-alignment: center;
+	-fx-content-display: center;
+	-fx-font-weight: bold;
+	-fx-font-size: 1.5em;
+}

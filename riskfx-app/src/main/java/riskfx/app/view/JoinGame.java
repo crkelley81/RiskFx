@@ -4,12 +4,12 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import appfx.ui.UiContext;
 import appfx.util.FxmlView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -21,18 +21,20 @@ import javafx.util.converter.IntegerStringConverter;
 import riskfx.engine.network.Connection;
 import riskfx.engine.network.ConnectionFactory;
 import riskfx.engine.network.ConnectionFactory.Auth;
+import riskfx.util.ui.UiContext;
 
 public class JoinGame extends FxmlView {
 	private final BooleanProperty connecting = new SimpleBooleanProperty(this, "connecting", false);
 
-	private final UiContext context;
+	private final UiContext<Node> context;
 	private final ConnectionFactory connectionFactory;
 
 	private final TextFormatter<Integer> portFormatter = new TextFormatter<>(new IntegerStringConverter());
 	
-	@Inject public JoinGame(final UiContext context, final ConnectionFactory connectionFactory) {
+	@Inject public JoinGame(final UiContext<Node> context, final ConnectionFactory connectionFactory) {
 		this.context = Objects.requireNonNull(context);
 		this.connectionFactory = Objects.requireNonNull(connectionFactory);
+		this.inflateView();
 	}
 	
 	@FXML public void initialize() {

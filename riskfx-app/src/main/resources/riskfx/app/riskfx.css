@@ -8,6 +8,12 @@
     -color-dark: #260e04;
 }
 
+.view { 
+
+	-fx-pref-width: 1024;
+	-fx-pref-height: 768
+}
+
 .appbar {
 	-fx-background-color: #260e04;
 	-fx-padding: 16 16 16 16;

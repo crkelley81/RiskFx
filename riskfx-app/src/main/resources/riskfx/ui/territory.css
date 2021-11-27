@@ -1,0 +1,15 @@
+.territory {
+	-background-fade: 0.3;
+}
+
+.territory:hover {
+	-background-fade: 0.5;	
+}
+
+.territory:selected {
+	-background-fade: 1.0;
+}
+
+.territory-indicator-text {
+	-fx-fill: white;
+}

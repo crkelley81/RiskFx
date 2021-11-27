@@ -3,10 +3,11 @@ package riskfx.app;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import riskfx.app.view.MainMenu;
-import riskfx.mapeditor.MapEditorModule;
+import riskfx.app.view.Navigation;
 
-@Singleton @Component(modules= { RiskFxModule.class, MapEditorModule.class })
+@Singleton
+@Component(modules = { RiskFxModule.class, NetworkModule.class })
 public interface RiskFxApp {
-	public MainMenu mainMenu();
+	public Navigation navigation();
+
 }

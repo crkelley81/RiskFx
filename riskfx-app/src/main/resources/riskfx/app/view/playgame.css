@@ -1,0 +1,28 @@
+#playerIndicatorBox {
+	-fx-alignment: center;
+	-fx-spacing: 24;
+}
+
+.player-indicator {
+	-fx-min-width: 150;
+	-fx-max-width: 200;
+	
+	-fx-spacing: 8;
+	-fx-padding: 8;
+	
+	-fx-alignment: center;
+}
+
+.player-indicator-label {
+	-fx-min-width: 100;
+	-fx-max-width: 150;
+	
+	-fx-alignment: center;
+	
+	-fx-font-size: 2em;
+}
+
+.phase-label {
+	-fx-font-size: 1.5em;
+	-fx-font-weight: bold;
+}
