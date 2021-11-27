@@ -8,7 +8,10 @@
  */
 
 rootProject.name = 'riskfx'
+include('riskfx-util')
 include('appfx')
 include('riskfx-app')
+include('riskfx-app-mapeditor')
 include('riskfx-engine')
 include('riskfx-engine-akka')
+include('riskfx-engine-ws')
